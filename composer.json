@@ -1,0 +1,18 @@
+{
+  "name": "ambiene/sluggable",
+  "description": "Minimal laravel package to handle multi purpose slugs",
+  "type": "library",
+  "license": "mit",
+  "autoload": {
+    "psr-4": {
+      "Ambiene\\Sluggable\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": ["Ambiene\\Sluggable\\ServiceProvider"]
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {}
+}
