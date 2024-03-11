@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
+    /**
+     * Boot the service provider.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->publishes(

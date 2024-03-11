@@ -22,15 +22,17 @@ To use the Sluggable trait in your Eloquent model, simply use the `HasSlug` trai
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Ambiene\Sluggable\HasSlug;
+use Its\Sluggable\HasSlug;
 
-class YourModel extends Model
+class Post extends Model
 {
-    use HasSlug;
+    use HasFactory, HasSlug;
 
-    // Specify the fields to be used for slug generation
-    protected $slugSource = ['title', 'other_field'];
+    protected $guarded = [];
 
-    // Your model's attributes and methods
+    protected function slugSourceFields(): string
+    {
+        return 'title';
+    }
 }
 ```

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 trait HasSlug
 {
     /**
-     * Boot the HasSlug trait for a model.
+     * Boot HasSlug trait for the model.
      *
      * @return void
      */
@@ -19,19 +19,15 @@ trait HasSlug
         });
 
         static::updating(function (Model $model) {
-            $slugSourceFields = $model->slugSourceFields();
-
-            foreach ($slugSourceFields as $field) {
-                if ($model->isDirty($field)) {
-                    $model->generateSlug();
-                    break;
-                }
+            $slugSourceField = $model->slugSourceFields();
+            if ($model->isDirty($slugSourceField)) {
+                $model->generateSlug();
             }
         });
     }
 
     /**
-     * Generate a slug for the model.
+     * Generate the slug for the model.
      *
      * @return void
      */
@@ -42,21 +38,15 @@ trait HasSlug
     }
 
     /**
-     * Slug generator.
+     * Get the value of the model's slug source field.
      *
      * @return string
      */
     protected function generator(): string
     {
-        $fields = $this->slugSourceFields();
-
-        $slug = collect($fields)
-            ->map(function ($field) {
-                return $this->{$field};
-            })
-            ->implode(config("sluggable.separator", "-"));
-
-        return Str::slug($slug);
+        $field = $this->slugSourceFields();
+        $value = $this->{$field};
+        return Str::slug($value, config("sluggable.separator", "-"));
     }
 
     /**
@@ -69,31 +59,22 @@ trait HasSlug
     protected function makeSlugUnique(string $slug, int $extra = 0): string
     {
         $originalSlug = $slug;
-
         if ($extra > 0) {
-            $slug = $originalSlug . "-" . $extra;
+            $slug = "{$originalSlug}-{$extra}";
         }
-
-        if (static::where("slug", $slug)->exists()) {
+        if (static::where('slug', $slug)->exists()) {
             return $this->makeSlugUnique($originalSlug, ++$extra);
         }
-
         return $slug;
     }
 
     /**
-     * Get the value of the model's slug field.
+     * Get the fields used to generate the slug.
      *
-     * @return array
+     * @return string
      */
-    protected function slugSourceFields(): array
+    protected function slugSourceFields(): string
     {
-        if (property_exists($this, "slugSource")) {
-            return is_array($this->slugSource)
-                ? $this->slugSource
-                : [$this->slugSource];
-        }
-
-        return ["name"];
+        return $this->slugSource ?? 'name';
     }
 }
