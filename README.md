@@ -22,7 +22,7 @@ To use the Sluggable trait in your Eloquent model, simply use the `HasSlug` trai
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Its\Sluggable\HasSlug;
+use Ambiene\Sluggable\HasSlug;
 
 class Post extends Model
 {
